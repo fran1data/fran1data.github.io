@@ -1,808 +1,1214 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fran Rodriguez — Data Analyst Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --bg-primary: #0a0f0d;
-  --bg-secondary: #0f1613;
-  --bg-card: #111a16;
-  --bg-card-hover: #162018;
-  --border: #1a2e24;
-  --border-glow: #2dd4804d;
-  --text-primary: #e8eeeb;
-  --text-secondary: #8fa89a;
-  --text-muted: #5c7a6a;
-  --accent: #2dd480;
-  --accent-dim: #1a9e5c;
-  --accent-glow: rgba(45, 212, 128, 0.15);
-  --accent-glow-strong: rgba(45, 212, 128, 0.25);
-  --font-display: 'Outfit', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* --- NOISE TEXTURE OVERLAY --- */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* --- GRID BACKGROUND --- */
-.grid-bg {
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.15;
-  z-index: 0;
-}
-
-.grid-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 50% at 50% 0%, var(--accent-glow) 0%, transparent 70%);
-}
-
-/* --- LAYOUT --- */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* --- NAV --- */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: 1rem 0;
-  background: rgba(10, 15, 13, 0.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-
-nav .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-logo {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--accent);
-  text-decoration: none;
-  letter-spacing: -0.5px;
-}
-
-.nav-logo span { color: var(--text-muted); }
-
-.nav-links { display: flex; gap: 2rem; list-style: none; }
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  transition: color 0.3s;
-  font-family: var(--font-mono);
-}
-
-.nav-links a:hover { color: var(--accent); }
-
-/* --- HERO --- */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding-top: 5rem;
-}
-
-.hero-content { max-width: 750px; }
-
-.hero-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--accent);
-  background: var(--accent-glow);
-  border: 1px solid var(--border-glow);
-  padding: 0.4rem 1rem;
-  border-radius: 100px;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.hero-tag .pulse {
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent); }
-  50% { opacity: 0.7; box-shadow: 0 0 0 6px transparent; }
-}
-
-.hero h1 {
-  font-size: clamp(2.8rem, 6vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -2px;
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 0.8s ease-out 0.1s both;
-}
-
-.hero h1 .accent { color: var(--accent); }
-.hero h1 .dim { color: var(--text-muted); }
-
-.hero-description {
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  max-width: 550px;
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-  font-weight: 300;
-  animation: fadeInUp 0.8s ease-out 0.2s both;
-}
-
-.hero-cta {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  animation: fadeInUp 0.8s ease-out 0.3s both;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 1.8rem;
-  border-radius: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: var(--bg-primary);
-}
-
-.btn-primary:hover {
-  background: #3ee08e;
-  box-shadow: 0 0 30px var(--accent-glow-strong);
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-
-.btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-
-/* --- SECTION SHARED --- */
-section { padding: 7rem 0; }
-
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.section-label::before {
-  content: '';
-  width: 30px;
-  height: 1px;
-  background: var(--accent-dim);
-}
-
-.section-title {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -1px;
-  margin-bottom: 3rem;
-}
-
-/* --- ABOUT --- */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
-}
-
-.about-text p {
-  color: var(--text-secondary);
-  font-size: 1.05rem;
-  line-height: 1.8;
-  font-weight: 300;
-  margin-bottom: 1.5rem;
-}
-
-.about-text strong { color: var(--text-primary); font-weight: 500; }
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s;
-}
-
-.stat-card:hover {
-  border-color: var(--border-glow);
-  background: var(--bg-card-hover);
-}
-
-.stat-number {
-  font-family: var(--font-mono);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
-  margin-bottom: 0.3rem;
-}
-
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* --- SKILLS / TOOLS --- */
-.tools-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.tool-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  transition: all 0.3s;
-}
-
-.tool-chip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-glow);
-}
-
-.tool-chip .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent-dim);
-}
-
-/* --- PROJECTS --- */
-.projects-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.project-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2rem 2.5rem;
-  transition: all 0.4s;
-  position: relative;
-  overflow: hidden;
-}
-
-.project-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.project-card:hover {
-  border-color: var(--border-glow);
-  background: var(--bg-card-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px var(--accent-glow);
-}
-
-.project-card:hover::before { opacity: 1; }
-
-.project-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  gap: 1rem;
-}
-
-.project-number {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--accent-dim);
-  letter-spacing: 1px;
-}
-
-.project-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.project-tag {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  background: rgba(45, 212, 128, 0.06);
-  border: 1px solid var(--border);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.project-title {
-  font-size: 1.35rem;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-}
-
-.project-description {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  font-weight: 300;
-  margin-bottom: 1.5rem;
-}
-
-.project-impact {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--accent);
-  background: var(--accent-glow);
-  padding: 0.4rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid rgba(45, 212, 128, 0.15);
-}
-
-.project-impact svg { flex-shrink: 0; }
-
-/* --- CONNECT --- */
-.connect-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
-.connect-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2.5rem 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  text-decoration: none;
-  color: var(--text-primary);
-  transition: all 0.4s;
-}
-
-.connect-card:hover {
-  border-color: var(--border-glow);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.connect-card svg {
-  width: 32px;
-  height: 32px;
-  color: var(--accent);
-}
-
-.connect-card .label {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.connect-card .url {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  word-break: break-all;
-  text-align: center;
-}
-
-/* --- FOOTER --- */
-footer {
-  padding: 3rem 0;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-footer p {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-footer .accent-dot {
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  background: var(--accent);
-  border-radius: 50%;
-  margin: 0 0.5rem;
-  vertical-align: middle;
-}
-
-/* --- ANIMATIONS --- */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* --- MOBILE NAV --- */
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
-.nav-toggle span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--text-secondary);
-  margin: 4px 0;
-  transition: all 0.3s;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-  .nav-toggle { display: block; }
-
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: rgba(10, 15, 13, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 1.5rem 2rem;
-    gap: 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-links.open { display: flex; }
-
-  .hero h1 { letter-spacing: -1px; }
-
-  .about-grid { grid-template-columns: 1fr; }
-
-  .connect-grid {
-    grid-template-columns: 1fr;
-    max-width: 400px;
-  }
-
-  .project-header { flex-direction: column; }
-}
-</style>
-</head>
-<body>
-
-<div class="grid-bg"></div>
-
-<!-- NAV -->
-<nav>
-  <div class="container">
-    <a href="#" class="nav-logo">fran<span>.data()</span></a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#connect">Connect</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-tag">
-        <span class="pulse"></span>
-        Open to opportunities
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fran Rodriguez — Data Analyst Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-primary: #0a0f0d;
+        --bg-secondary: #0f1613;
+        --bg-card: #111a16;
+        --bg-card-hover: #162018;
+        --border: #1a2e24;
+        --border-glow: #2dd4804d;
+        --text-primary: #e8eeeb;
+        --text-secondary: #8fa89a;
+        --text-muted: #5c7a6a;
+        --accent: #2dd480;
+        --accent-dim: #1a9e5c;
+        --accent-glow: rgba(45, 212, 128, 0.15);
+        --accent-glow-strong: rgba(45, 212, 128, 0.25);
+        --font-display: "Outfit", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-display);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* --- NOISE TEXTURE OVERLAY --- */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      /* --- GRID BACKGROUND --- */
+      .grid-bg {
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 60px 60px;
+        opacity: 0.15;
+        z-index: 0;
+      }
+
+      .grid-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 80% 50% at 50% 0%,
+          var(--accent-glow) 0%,
+          transparent 70%
+        );
+      }
+
+      /* --- LAYOUT --- */
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* --- NAV --- */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 1rem 0;
+        background: rgba(10, 15, 13, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-logo {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--accent);
+        text-decoration: none;
+        letter-spacing: -0.5px;
+      }
+
+      .nav-logo span {
+        color: var(--text-muted);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: color 0.3s;
+        font-family: var(--font-mono);
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      /* --- HERO --- */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding-top: 5rem;
+      }
+
+      .hero-content {
+        max-width: 750px;
+      }
+
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--accent);
+        background: var(--accent-glow);
+        border: 1px solid var(--border-glow);
+        padding: 0.4rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      .hero-tag .pulse {
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 var(--accent);
+        }
+        50% {
+          opacity: 0.7;
+          box-shadow: 0 0 0 6px transparent;
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 6vw, 4.5rem);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -2px;
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.8s ease-out 0.1s both;
+      }
+
+      .hero h1 .accent {
+        color: var(--accent);
+      }
+      .hero h1 .dim {
+        color: var(--text-muted);
+      }
+
+      .hero-description {
+        font-size: 1.15rem;
+        color: var(--text-secondary);
+        max-width: 550px;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        font-weight: 300;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.8rem;
+        border-radius: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: var(--bg-primary);
+      }
+
+      .btn-primary:hover {
+        background: #3ee08e;
+        box-shadow: 0 0 30px var(--accent-glow-strong);
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+      }
+
+      .btn-outline:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      /* --- SECTION SHARED --- */
+      section {
+        padding: 7rem 0;
+      }
+
+      .section-label {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-label::before {
+        content: "";
+        width: 30px;
+        height: 1px;
+        background: var(--accent-dim);
+      }
+
+      .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin-bottom: 3rem;
+      }
+
+      /* --- ABOUT --- */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+
+      .about-text p {
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+      }
+
+      .about-text strong {
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .stat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+      }
+
+      .stat-card:hover {
+        border-color: var(--border-glow);
+        background: var(--bg-card-hover);
+      }
+
+      .stat-number {
+        font-family: var(--font-mono);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* --- SKILLS / TOOLS --- */
+      .tools-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .tool-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1.2rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        transition: all 0.3s;
+      }
+
+      .tool-chip:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-glow);
+      }
+
+      .tool-chip .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent-dim);
+      }
+
+      /* --- PROJECTS --- */
+      .projects-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .project-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem 2.5rem;
+        transition: all 0.4s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+
+      .project-card:hover {
+        border-color: var(--border-glow);
+        background: var(--bg-card-hover);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px var(--accent-glow);
+      }
+
+      .project-card:hover::before {
+        opacity: 1;
+      }
+
+      .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+
+      .project-number {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--accent-dim);
+        letter-spacing: 1px;
+      }
+
+      .project-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .project-tag {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        background: rgba(45, 212, 128, 0.06);
+        border: 1px solid var(--border);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .project-title {
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+      }
+
+      .project-description {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+      }
+
+      .project-impact {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        background: var(--accent-glow);
+        padding: 0.4rem 0.9rem;
+        border-radius: 6px;
+        border: 1px solid rgba(45, 212, 128, 0.15);
+      }
+
+      .project-impact svg {
+        flex-shrink: 0;
+      }
+
+      /* --- README TOGGLE & EXPAND --- */
+      .readme-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 0;
+        margin-top: 1.25rem;
+        background: none;
+        border: none;
+        border-top: 1px solid var(--border);
+        color: var(--accent);
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+      }
+      .readme-toggle:hover {
+        opacity: 0.75;
+      }
+      .readme-toggle .toggle-arrow {
+        display: inline-block;
+        font-size: 0.7rem;
+        transition: transform 0.35s ease;
+      }
+      .readme-toggle.open .toggle-arrow {
+        transform: rotate(180deg);
+      }
+
+      .readme-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+      }
+      .readme-wrapper.expanded {
+        max-height: 10000px;
+      }
+
+      .readme-body {
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.88rem;
+        line-height: 1.75;
+        color: var(--text-secondary);
+      }
+
+      .readme-body h1,
+      .readme-body h2,
+      .readme-body h3 {
+        color: var(--text-primary);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .readme-body h1 { font-size: 1.25rem; }
+      .readme-body h2 {
+        font-size: 1.05rem;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .readme-body h3 { font-size: 0.95rem; }
+
+      .readme-body p { margin-bottom: 0.75rem; }
+
+      .readme-body ul,
+      .readme-body ol {
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .readme-body li { margin-bottom: 0.3rem; }
+
+      .readme-body a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .readme-body a:hover { text-decoration: underline; }
+
+      .readme-body strong { color: var(--text-primary); }
+
+      .readme-body img {
+        max-width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin: 1rem 0;
+      }
+
+      .readme-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.8rem;
+      }
+      .readme-body th,
+      .readme-body td {
+        text-align: left;
+        padding: 0.5rem 0.65rem;
+        border: 1px solid var(--border);
+      }
+      .readme-body th {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .readme-body hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 1.5rem 0;
+      }
+
+      .readme-body code {
+        background: rgba(45, 212, 128, 0.06);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-family: var(--font-mono);
+      }
+
+      .readme-loading {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 1rem 0;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+      }
+      .readme-spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: readme-spin 0.7s linear infinite;
+      }
+      @keyframes readme-spin { to { transform: rotate(360deg); } }
+
+      .readme-error {
+        padding: 1rem 0;
+        font-size: 0.82rem;
+        color: #f85149;
+      }
+      .readme-error a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      /* --- CONNECT --- */
+      .connect-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .connect-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 2.5rem 1.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all 0.4s;
+      }
+
+      .connect-card:hover {
+        border-color: var(--border-glow);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .connect-card svg {
+        width: 32px;
+        height: 32px;
+        color: var(--accent);
+      }
+
+      .connect-card .label {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .connect-card .url {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        word-break: break-all;
+        text-align: center;
+      }
+
+      /* --- FOOTER --- */
+      footer {
+        padding: 3rem 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      footer p {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      footer .accent-dot {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 50%;
+        margin: 0 0.5rem;
+        vertical-align: middle;
+      }
+
+      /* --- ANIMATIONS --- */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* --- MOBILE NAV --- */
+      .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+
+      .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--text-secondary);
+        margin: 4px 0;
+        transition: all 0.3s;
+      }
+
+      /* --- RESPONSIVE --- */
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: block;
+        }
+
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          background: rgba(10, 15, 13, 0.95);
+          backdrop-filter: blur(20px);
+          padding: 1.5rem 2rem;
+          gap: 1rem;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .nav-links.open {
+          display: flex;
+        }
+
+        .hero h1 {
+          letter-spacing: -1px;
+        }
+
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .connect-grid {
+          grid-template-columns: 1fr;
+          max-width: 400px;
+        }
+
+        .project-header {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-bg"></div>
+
+    <!-- NAV -->
+    <nav>
+      <div class="container">
+        <a href="#" class="nav-logo">fran<span>.data()</span></a>
+        <button
+          class="nav-toggle"
+          onclick="document.querySelector('.nav-links').classList.toggle('open')"
+          aria-label="Toggle navigation"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#connect">Connect</a></li>
+        </ul>
       </div>
-      <h1>
-        Fran Rodriguez<br>
-        <span class="dim">turning data into</span><br>
-        <span class="accent">decisions</span>
-      </h1>
-      <p class="hero-description">
-        Data analyst building a portfolio of real-world projects in healthcare analytics, sports analytics, and energy exploration. I dig into messy datasets and surface the insights that drive action.
-      </p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-          View Projects
-        </a>
-        <a href="https://github.com/fran1data" target="_blank" rel="noopener" class="btn btn-outline">
-          GitHub →
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+    </nav>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="container">
-    <div class="section-label">About</div>
-    <h2 class="section-title reveal">Background</h2>
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p>
-          I'm <strong>Fran Rodriguez</strong> — a data analyst with a focus on turning raw data into clear, actionable insights. I work across <strong>Excel, Power Query, Tableau, SQL, R, and Python</strong> to build dashboards, perform exploratory analyses, and deliver findings that stakeholders can act on immediately.
-        </p>
-        <p>
-          My projects span <strong>healthcare operations, sports analytics, and energy data</strong> — reflecting both my analytical skillset and curiosity for domains where data-driven decisions have real impact.
-        </p>
-      </div>
-      <div class="stats-grid reveal">
-        <div class="stat-card">
-          <div class="stat-number">3</div>
-          <div class="stat-label">Projects</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">3+</div>
-          <div class="stat-label">Domains</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">5+</div>
-          <div class="stat-label">Tools</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">∞</div>
-          <div class="stat-label">Curiosity</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TOOLS -->
-    <div style="margin-top: 3rem;" class="reveal">
-      <div class="section-label">Toolkit</div>
-      <div class="tools-row" style="margin-top: 1rem;">
-        <span class="tool-chip"><span class="dot"></span>Excel</span>
-        <span class="tool-chip"><span class="dot"></span>Power Query</span>
-        <span class="tool-chip"><span class="dot"></span>Tableau</span>
-        <span class="tool-chip"><span class="dot"></span>SQL</span>
-        <span class="tool-chip"><span class="dot"></span>R</span>
-        <span class="tool-chip"><span class="dot"></span>Python</span>
-        <span class="tool-chip"><span class="dot"></span>Pandas</span>
-        <span class="tool-chip"><span class="dot"></span>Data Visualization</span>
-        <span class="tool-chip"><span class="dot"></span>EDA</span>
-        <span class="tool-chip"><span class="dot"></span>Git / GitHub</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects" style="padding-top: 2rem;">
-  <div class="container">
-    <div class="section-label">Projects</div>
-    <h2 class="section-title reveal">Selected Work</h2>
-
-    <div class="projects-grid">
-      <!-- Project 1 -->
-      <div class="project-card reveal">
-        <div class="project-header">
-          <span class="project-number">01</span>
-          <div class="project-tags">
-            <span class="project-tag">Excel</span>
-            <span class="project-tag">Power Query</span>
-            <span class="project-tag">Healthcare</span>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <span class="pulse"></span>
+            Open to opportunities
+          </div>
+          <h1>
+            Fran Rodriguez<br />
+            <span class="dim">turning data into</span><br />
+            <span class="accent">decisions</span>
+          </h1>
+          <p class="hero-description">
+            Data analyst building a portfolio of real-world projects in
+            healthcare analytics, sports analytics, and energy exploration. I
+            dig into messy datasets and surface the insights that drive action.
+          </p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+              View Projects
+            </a>
+            <a
+              href="https://github.com/fjrdz22"
+              target="_blank"
+              rel="noopener"
+              class="btn btn-outline"
+            >
+              GitHub →
+            </a>
           </div>
         </div>
-        <h3 class="project-title">Healthcare Readmissions Analysis</h3>
-        <p class="project-description">
-          Variance analysis by condition with KPI cards, state heatmap, and executive summary — designed to help hospital leadership identify cost-saving targets at a glance.
-        </p>
-        <div class="project-impact">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>
-          Surfaces cost-saving targets within minutes
-        </div>
       </div>
+    </section>
 
-      <!-- Project 2 -->
-      <a href="https://public.tableau.com/app/profile/fran.rodriguez4313/viz/EPLFinishingAnalysis23-24/EPLShootingandFinishingAnalysis" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
-        <div class="project-card reveal">
-          <div class="project-header">
-            <span class="project-number">02</span>
-            <div class="project-tags">
-              <span class="project-tag">Tableau</span>
-              <span class="project-tag">Sports Analytics</span>
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="section-label">About</div>
+        <h2 class="section-title reveal">Background</h2>
+        <div class="about-grid">
+          <div class="about-text reveal">
+            <p>
+              I'm <strong>Fran Rodriguez</strong> — a data analyst with a focus
+              on turning raw data into clear, actionable insights. I work across
+              <strong>Excel, Power Query, Tableau, SQL, and Python</strong> to
+              build dashboards, perform exploratory analyses, and deliver
+              findings that stakeholders can act on immediately.
+            </p>
+            <p>
+              My projects span
+              <strong
+                >healthcare operations, sports analytics, and energy
+                data</strong
+              >
+              — reflecting both my analytical skillset and curiosity for domains
+              where data-driven decisions have real impact.
+            </p>
+          </div>
+          <div class="stats-grid reveal">
+            <div class="stat-card">
+              <div class="stat-number">3</div>
+              <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">3+</div>
+              <div class="stat-label">Domains</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">5+</div>
+              <div class="stat-label">Tools</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">∞</div>
+              <div class="stat-label">Curiosity</div>
             </div>
           </div>
-          <h3 class="project-title">EPL Finishing Analysis 2023–2024</h3>
-          <p class="project-description">
-            Deep dive into Premier League finishing efficiency — top scorers, goals vs. expected goals (xG), shot volume vs. finishing quality, and over/under xG rankings across the season.
-          </p>
-          <div class="project-impact">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            View on Tableau Public →
+        </div>
+
+        <!-- TOOLS -->
+        <div style="margin-top: 3rem" class="reveal">
+          <div class="section-label">Toolkit</div>
+          <div class="tools-row" style="margin-top: 1rem">
+            <span class="tool-chip"><span class="dot"></span>Excel</span>
+            <span class="tool-chip"><span class="dot"></span>Power Query</span>
+            <span class="tool-chip"><span class="dot"></span>Tableau</span>
+            <span class="tool-chip"><span class="dot"></span>SQL</span>
+            <span class="tool-chip"><span class="dot"></span>Python</span>
+            <span class="tool-chip"><span class="dot"></span>Pandas</span>
+            <span class="tool-chip"
+              ><span class="dot"></span>Data Visualization</span
+            >
+            <span class="tool-chip"><span class="dot"></span>EDA</span>
+            <span class="tool-chip"><span class="dot"></span>Git / GitHub</span>
           </div>
         </div>
-      </a>
+      </div>
+    </section>
 
-      <!-- Project 3 -->
-      <a href="https://public.tableau.com/app/profile/fran.rodriguez4313/viz/U_S_ShaleDrillingProductionEDA-Jan2023toFeb2026/U_S_ShaleDrillingProductionEDA-Jan2023toFeb2026" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
-        <div class="project-card reveal">
-          <div class="project-header">
-            <span class="project-number">03</span>
-            <div class="project-tags">
-              <span class="project-tag">Tableau</span>
-              <span class="project-tag">EDA</span>
-              <span class="project-tag">Energy</span>
+    <!-- PROJECTS -->
+    <section id="projects" style="padding-top: 2rem">
+      <div class="container">
+        <div class="section-label">Projects</div>
+        <h2 class="section-title reveal">Selected Work</h2>
+
+        <div class="projects-grid">
+          <!-- Project 1 -->
+          <div class="project-card reveal">
+            <div class="project-header">
+              <span class="project-number">01</span>
+              <div class="project-tags">
+                <span class="project-tag">Excel</span>
+                <span class="project-tag">Power Query</span>
+                <span class="project-tag">Healthcare</span>
+              </div>
+            </div>
+            <h3 class="project-title">Healthcare Readmissions Analysis</h3>
+            <p class="project-description">
+              Variance analysis by condition with KPI cards, state heatmap, and
+              executive summary — designed to help hospital leadership identify
+              cost-saving targets at a glance.
+            </p>
+            <div class="project-impact">
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
+              </svg>
+              Surfaces cost-saving targets within minutes
+            </div>
+
+            <!-- GitHub link + README toggle -->
+            <div style="margin-top: 1rem">
+              <a
+                href="https://github.com/fran1data/hospital-readmission-analysis"
+                target="_blank"
+                style="
+                  font-size: 0.8rem;
+                  color: var(--accent);
+                  text-decoration: none;
+                  opacity: 0.8;
+                "
+              >
+                ↗ View on GitHub
+              </a>
+            </div>
+
+            <button
+              class="readme-toggle"
+              onclick="toggleReadme(this, 'fran1data', 'hospital-readmission-analysis')"
+              aria-expanded="false"
+            >
+              <span>Read Full Analysis</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+
+            <div class="readme-wrapper">
+              <div class="readme-body">
+                <div class="readme-loading">
+                  <div class="readme-spinner"></div>
+                  Loading analysis from GitHub…
+                </div>
+              </div>
             </div>
           </div>
-          <h3 class="project-title">U.S. Shale Drilling & Production EDA</h3>
-          <p class="project-description">
-            Exploratory data analysis of U.S. shale drilling and production trends from January 2023 through February 2026 — mapping output across major basins and identifying inflection points.
-          </p>
-          <div class="project-impact">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            View on Tableau Public →
-          </div>
+
+          <!-- Project 2 -->
+          <a
+            href="https://public.tableau.com/app/profile/fran.rodriguez4313/vizzes"
+            target="_blank"
+            rel="noopener"
+            style="text-decoration: none; color: inherit"
+          >
+            <div class="project-card reveal">
+              <div class="project-header">
+                <span class="project-number">02</span>
+                <div class="project-tags">
+                  <span class="project-tag">Tableau</span>
+                  <span class="project-tag">EDA</span>
+                  <span class="project-tag">Energy</span>
+                </div>
+              </div>
+              <h3 class="project-title">
+                U.S. Shale Drilling & Production EDA
+              </h3>
+              <p class="project-description">
+                Exploratory data analysis of U.S. shale drilling and production
+                trends from January 2023 through February 2026 — mapping output
+                across major basins and identifying inflection points.
+              </p>
+              <div class="project-impact">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
+                  />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                View on Tableau Public →
+              </div>
+            </div>
+          </a>
+
+          <!-- Project 3 (fixed: now inside .projects-grid) -->
+          <a
+            href="https://public.tableau.com/app/profile/fran.rodriguez4313/vizzes"
+            target="_blank"
+            rel="noopener"
+            style="text-decoration: none; color: inherit"
+          >
+            <div class="project-card reveal">
+              <div class="project-header">
+                <span class="project-number">03</span>
+                <div class="project-tags">
+                  <span class="project-tag">Tableau</span>
+                  <span class="project-tag">Sports Analytics</span>
+                </div>
+              </div>
+              <h3 class="project-title">EPL Finishing Analysis 2023–2024</h3>
+              <p class="project-description">
+                Deep dive into Premier League finishing efficiency — top scorers,
+                goals vs. expected goals (xG), shot volume vs. finishing quality,
+                and over/under xG rankings across the season.
+              </p>
+              <div class="project-impact">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
+                  />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                View on Tableau Public →
+              </div>
+            </div>
+          </a>
         </div>
-      </a>
-    </div>
-  </div>
-</section>
+      </div>
+    </section>
 
-<!-- CONNECT -->
-<section id="connect">
-  <div class="container">
-    <div class="section-label">Connect</div>
-    <h2 class="section-title reveal">Let's Talk Data</h2>
-    <div class="connect-grid reveal">
-      <a href="https://github.com/fran1data" target="_blank" rel="noopener" class="connect-card">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        <span class="label">GitHub</span>
-        <span class="url">github.com/fran1data</span>
-      </a>
-      <a href="https://public.tableau.com/app/profile/fran.rodriguez4313/vizzes" target="_blank" rel="noopener" class="connect-card">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.654.174V2.377H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.696zm6.03 2.262l-.002 1.623-1.492-.013v.477h1.494v1.607h.576V4.523h1.494v-.477h-1.494V2.436h-.576zM.98 4.09v1.62H2.47v.476H.98V7.8h.58V6.186h1.49v-.475H1.56V4.09H.98zm11.752.263V6.46H10.83v.576h1.902v2.105h.694V7.036h1.902v-.576h-1.902V4.353h-.694zM5.7 6.223V7.85H4.208v.476H5.7v1.627h.576V8.326h1.494v-.476H6.276V6.223H5.7zm11.76 0V7.85h-1.492v.476h1.492v1.627h.576V8.326h1.494v-.476h-1.494V6.223h-.576zM.98 8.27v1.626h1.49v.476H.98v1.627h.58v-1.627h1.49v-.476H1.56V8.27H.98zm17.542 1.088v2.107h-1.904v.576h1.904v2.107h.694v-2.107h1.904v-.576h-1.904V9.358h-.694zm-5.79.205v1.627h-1.494v.475h1.494v1.628h.576v-1.628h1.494v-.475h-1.494V9.563h-.576zm-5.88.262v1.625H5.36v.477h1.492v1.625h.576v-1.625h1.494v-.477H7.428V9.825h-.576zm11.641 1.852v2.108h-1.904v.574h1.904v2.108h.694v-2.108h1.904v-.574h-1.904v-2.108h-.694zM5.7 12.39v1.626H4.208v.477H5.7v1.626h.576V14.493h1.494v-.477H6.276V12.39H5.7zm5.973.263V14.76h-1.902v.575h1.902v2.107h.694V15.335h1.902v-.575h-1.902v-2.107h-.694zM.98 14.436v1.627h1.49v.476H.98v1.627h.58v-1.627h1.49v-.476H1.56v-1.627H.98zm11.673 2.215v2.108h-1.904v.575h1.904v2.108h.694v-2.108h1.904v-.575h-1.904v-2.108h-.694zm-5.88.26v1.627H5.28v.477h1.493v1.627h.576v-1.627h1.494v-.477H7.349v-1.627h-.576zm11.76 0v1.627h-1.492v.477h1.492v1.627h.576v-1.627h1.494v-.477h-1.494v-1.627h-.576zm-5.88 2.223v1.627h-1.494v.475h1.494V21.864h.576v-1.628h1.494v-.475h-1.494v-1.627h-.576zm0 4.166v2.204h-.696v-2.204h.696z"/></svg>
-        <span class="label">Tableau Public</span>
-        <span class="url">Fran Rodriguez</span>
-      </a>
-      <a href="mailto:fran1data@gmail.com" class="connect-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-        <span class="label">Email</span>
-        <span class="url">fran1data@gmail.com</span>
-      </a>
-    </div>
-  </div>
-</section>
+    <!-- CONNECT -->
+    <section id="connect">
+      <div class="container">
+        <div class="section-label">Connect</div>
+        <h2 class="section-title reveal">Let's Talk Data</h2>
+        <div class="connect-grid reveal">
+          <a
+            href="https://github.com/fjrdz22"
+            target="_blank"
+            rel="noopener"
+            class="connect-card"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            <span class="label">GitHub</span>
+            <span class="url">github.com/fjrdz22</span>
+          </a>
+          <a
+            href="https://public.tableau.com/app/profile/fran.rodriguez4313/vizzes"
+            target="_blank"
+            rel="noopener"
+            class="connect-card"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M11.654.174V2.377H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.696zm6.03 2.262l-.002 1.623-1.492-.013v.477h1.494v1.607h.576V4.523h1.494v-.477h-1.494V2.436h-.576zM.98 4.09v1.62H2.47v.476H.98V7.8h.58V6.186h1.49v-.475H1.56V4.09H.98zm11.752.263V6.46H10.83v.576h1.902v2.105h.694V7.036h1.902v-.576h-1.902V4.353h-.694zM5.7 6.223V7.85H4.208v.476H5.7v1.627h.576V8.326h1.494v-.476H6.276V6.223H5.7zm11.76 0V7.85h-1.492v.476h1.492v1.627h.576V8.326h1.494v-.476h-1.494V6.223h-.576zM.98 8.27v1.626h1.49v.476H.98v1.627h.58v-1.627h1.49v-.476H1.56V8.27H.98zm17.542 1.088v2.107h-1.904v.576h1.904v2.107h.694v-2.107h1.904v-.576h-1.904V9.358h-.694zm-5.79.205v1.627h-1.494v.475h1.494v1.628h.576v-1.628h1.494v-.475h-1.494V9.563h-.576zm-5.88.262v1.625H5.36v.477h1.492v1.625h.576v-1.625h1.494v-.477H7.428V9.825h-.576zm11.641 1.852v2.108h-1.904v.574h1.904v2.108h.694v-2.108h1.904v-.574h-1.904v-2.108h-.694zM5.7 12.39v1.626H4.208v.477H5.7v1.626h.576V14.493h1.494v-.477H6.276V12.39H5.7zm5.973.263V14.76h-1.902v.575h1.902v2.107h.694V15.335h1.902v-.575h-1.902v-2.107h-.694zM.98 14.436v1.627h1.49v.476H.98v1.627h.58v-1.627h1.49v-.476H1.56v-1.627H.98zm11.673 2.215v2.108h-1.904v.575h1.904v2.108h.694v-2.108h1.904v-.575h-1.904v-2.108h-.694zm-5.88.26v1.627H5.28v.477h1.493v1.627h.576v-1.627h1.494v-.477H7.349v-1.627h-.576zm11.76 0v1.627h-1.492v.477h1.492v1.627h.576v-1.627h1.494v-.477h-1.494v-1.627h-.576zm-5.88 2.223v1.627h-1.494v.475h1.494V21.864h.576v-1.628h1.494v-.475h-1.494v-1.627h-.576zm0 4.166v2.204h-.696v-2.204h.696z"
+              />
+            </svg>
+            <span class="label">Tableau Public</span>
+            <span class="url">Fran Rodriguez</span>
+          </a>
+          <a href="mailto:fran1data@gmail.com" class="connect-card">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M22 4L12 13 2 4" />
+            </svg>
+            <span class="label">Email</span>
+            <span class="url">fran1data@gmail.com</span>
+          </a>
+        </div>
+      </div>
+    </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <p>Fran Rodriguez <span class="accent-dot"></span> Built with intention <span class="accent-dot"></span> 2025</p>
-  </div>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <p>
+          Fran Rodriguez <span class="accent-dot"></span> Built with intention
+          <span class="accent-dot"></span> 2025
+        </p>
+      </div>
+    </footer>
 
-<!-- SCROLL REVEAL -->
-<script>
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    <!-- SCROLL REVEAL -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+      );
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
 
-// Close mobile nav on link click
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
-</script>
-</body>
+      // Close mobile nav on link click
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        link.addEventListener("click", () => {
+          document.querySelector(".nav-links").classList.remove("open");
+        });
+      });
+    </script>
+
+    <!-- README TOGGLE SCRIPT -->
+    <script>
+      const loadedReadmes = {};
+
+      function toggleReadme(btn, owner, repo) {
+        const wrapper = btn.nextElementSibling;
+        const isOpen = wrapper.classList.toggle("expanded");
+
+        btn.classList.toggle("open", isOpen);
+        btn.querySelector("span:first-child").textContent = isOpen
+          ? "Collapse Analysis"
+          : "Read Full Analysis";
+        btn.setAttribute("aria-expanded", isOpen);
+
+        const key = owner + "/" + repo;
+        if (isOpen && !loadedReadmes[key]) {
+          fetchReadme(wrapper.querySelector(".readme-body"), owner, repo);
+          loadedReadmes[key] = true;
+        }
+      }
+
+      async function fetchReadme(container, owner, repo) {
+        try {
+          const res = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/readme`,
+            { headers: { Accept: "application/vnd.github.v3.html" } }
+          );
+          if (!res.ok) throw new Error("API error");
+          container.innerHTML = await res.text();
+        } catch (e) {
+          container.innerHTML = `
+            <div class="readme-error">
+              Could not load README.
+              <a href="https://github.com/${owner}/${repo}" target="_blank">
+                View on GitHub instead →
+              </a>
+            </div>`;
+        }
+      }
+    </script>
+  </body>
 </html>
