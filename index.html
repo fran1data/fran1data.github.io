@@ -1118,7 +1118,7 @@
             <span class="label">Tableau Public</span>
             <span class="url">Fran Rodriguez</span>
           </a>
-          <a href="mailto:fran1data@gmail.com" class="connect-card">
+          <a href="/cdn-cgi/l/email-protection#0a6c786b643b6e6b7e6b4a6d676b636624696567" class="connect-card">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -1129,7 +1129,7 @@
               <path d="M22 4L12 13 2 4" />
             </svg>
             <span class="label">Email</span>
-            <span class="url">fran1data@gmail.com</span>
+            <span class="url"><span class="__cf_email__" data-cfemail="244256454a1540455045644349454d480a474b49">[email&#160;protected]</span></span>
           </a>
         </div>
       </div>
@@ -1146,7 +1146,7 @@
     </footer>
 
     <!-- SCROLL REVEAL -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -1199,6 +1199,24 @@
           );
           if (!res.ok) throw new Error("API error");
           container.innerHTML = await res.text();
+
+          // Fix image paths — rewrite relative/blob URLs to raw.githubusercontent.com
+          container.querySelectorAll("img").forEach((img) => {
+            const src = img.getAttribute("src") || "";
+            // Handle /owner/repo/blob/main/... links (GitHub renders these)
+            if (src.includes("/blob/")) {
+              img.src = src
+                .replace("github.com", "raw.githubusercontent.com")
+                .replace("/blob/", "/");
+            }
+            // Handle relative paths like 3_visuals/charts/kpi_cards.png
+            else if (!src.startsWith("http")) {
+              img.src = `https://raw.githubusercontent.com/${owner}/${repo}/main/${src}`;
+            }
+            // Handle camo proxy URLs (GitHub's image proxy) — these should work as-is
+            // but set crossorigin to anonymous just in case
+            img.setAttribute("loading", "lazy");
+          });
         } catch (e) {
           container.innerHTML = `
             <div class="readme-error">
